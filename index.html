@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Prueba FrontEnd</title>
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/estilos.css">
+	<link rel="stylesheet" href="css/fuentes.css">
+	<link rel="stylesheet" href="css/fuentes2.css">
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script>
+		var contador = 6;
+		var index;
+		var texto;
+
+		$(function() {
+		    $( "#sortable" ).sortable({
+			    connectWith: ".sortable",
+			    handle: ".itemselect"});
+		    $( "#sortable" ).disableSelection();
+		});
+
+		$(document).ready(function(){
+			$("#sortable").on("dblclick", "li", function(){
+				index = $(this).attr("id");
+				document.getElementById("mark"+index).style.display = "block";
+				document.getElementById("pencil"+index).style.display = "none";
+				document.getElementById("pencil"+index).id = "nada";
+			});
+
+			$("#sortable").on("mouseenter", "li", function(){
+				index = $(this).attr("id");
+			   	document.getElementById("pencil"+index).style.display = "block";
+			});
+
+			$("#sortable").on("mouseleave", "li", function(){
+				index = $(this).attr("id");
+			    	document.getElementById("pencil"+index).style.display = "none";
+			});
+
+			$("#sortable").on("click", "li .edit", function(){
+				index = $(this).attr("id");
+				index = index.replace(/\D/g,'');
+				$("#txt").val(document.getElementById("contenido"+index).innerHTML);
+				$("#dialog-form1").dialog("open");
+			});
+
+			$("#add").click(function(){
+		    	$("#dialog-form2").dialog("open");
+		    });
+		});
+
+		$(function() {
+		    $("#dialog-form1").dialog({
+		        autoOpen: false,
+		        modal: true,
+		        title: "Modificar Item",
+		        buttons: {
+		            "Aceptar": function() {
+		                texto = $("#txt").val();
+		                if (texto != null && texto != "") {
+			    			document.getElementById("contenido"+index).innerHTML = texto;
+			    		}
+			    		$("#txt").val("");
+		                $(this).dialog("close");
+		            },
+		            "Cancelar": function() {
+		                $(this).dialog("close");
+		            }
+		        }
+		    }),
+		    $("#dialog-form2").dialog({
+		        autoOpen: false,
+		        modal: true,
+		        title: "Ingresar nuevo Item",
+		        buttons: {
+		            "Aceptar": function() {
+		                texto = $("#txt2").val();
+		                if (texto != null && texto != "") {
+					        $("ol").append('<li id="'+contador+'"><div class="itemselect">:::::</div><span id="mark'+contador+'" class="icon-checkmark"></span><span id="contenido'+contador+'" class="item">'+texto+'</span><span id="pencil'+contador+'" class="icon-pencil edit"></span></li>');
+					        contador++;
+				    	}
+			    		$("#txt2").val("");
+		                $(this).dialog("close");
+		            },
+		            "Cancelar": function() {
+		                $(this).dialog("close");
+		            }
+		        }
+		    });
+		});
+	</script>
+</head>
+<body>
+	<section class="wrapper">
+		<section class="top">
+			<ul>
+				<li><span class="icon-bookmark1"></span><br /><span class="link">Task</span></li>
+				<li id="add"><span class="icon-calendar1"></span><br /><span class="link">Add New</span></li>
+				<li><span class="icon-graph"></span><br /><span class="link">Reports</span></li>
+				<li><span class="icon-gear"></span><br /><span class="link">Settings</span></li>
+			</ul>
+		</section>
+		<br /><br />
+		<section class="content">
+		<ol id="sortable">
+			<li id="1"><div class="itemselect">:::::</div><span id="mark1" class="icon-checkmark"></span><span id="contenido1" class="item">Buy Vegetables</span><span id="pencil1" class="icon-pencil edit"></span></li>
+			<li id="2"><div class="itemselect">:::::</div><span id="mark2" class="icon-checkmark"></span><span id="contenido2" class="item">Design app UI</span><span id="pencil2" class="icon-pencil edit"></span></li>
+			<li id="3"><div class="itemselect">:::::</div><span id="mark3" class="icon-checkmark"></span><span id="contenido3" class="item">Visit Mr.Smith at 8 o'Clock</span><span id="pencil3" class="icon-pencil edit"></span></li>
+			<li id="4"><div class="itemselect">:::::</div><span id="mark4" class="icon-checkmark"></span><span id="contenido4" class="item">Climb Mount</span><span id="pencil4" class="icon-pencil edit"></span></li>
+			<li id="5"><div class="itemselect">:::::</div><span id="mark5" class="icon-checkmark"></span><span id="contenido5" class="item">Go top</span><span id="pencil5" class="icon-pencil edit"></span></li>
+		</ol>		
+		</section>
+	</section>
+	<div id="dialog-form1">
+    <form>
+        <input type="text" name="text" id="txt" class="text ui-widget-content ui-corner-all" />
+    </form>
+	</div>
+	<div id="dialog-form2">
+    <form>
+        <input type="text" name="text2" id="txt2" class="text ui-widget-content ui-corner-all" />
+    </form>
+	</div>
+</body>
+</html>
